@@ -4,7 +4,7 @@
     "description": "Extension to display useful stats on https://highseas.hackclub.com/",
     "version": "1.0",
     "action": {
-      "default_popup": "popup.html",
+      "default_popup": "popup/popup.html",
       "default_icon": "flag-standalone-bw.png"
     },
     "content_scripts": [
