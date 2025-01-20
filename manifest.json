@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "Yet Another HighSeas Extension",
+    "description": "Extension to display useful stats on https://highseas.hackclub.com/",
+    "version": "1.0",
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "flag-standalone-bw.png"
+    },
+    "content_scripts": [
+        {
+            "js": ["scripts/main.js"],
+            "matches": [
+                "https://highseas.hackclub.com/*"
+            ]
+        }
+    ]
+}
