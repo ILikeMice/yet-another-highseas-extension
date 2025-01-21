@@ -37,6 +37,11 @@ window.onload = async () => {
     for (let i = 0; i < Object.keys(shipdata["value"]).length; i++) {
       console.log(shipdata["value"][i])
     }
+        
     console.log(shipdata)
+
+    for (let i = 0; i < Object.keys(shipdata); i++) {
+        adddph(`ship-${i}-shipped`)
+    }
 
 }
