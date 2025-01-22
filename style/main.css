@@ -1,3 +1,33 @@
+.brightgreenbg {
+    background-color: rgb(86, 225, 0)
+}
+
 .greenbg {
-    background-color: rgb(44, 213, 15)
+    background-color: rgb(78, 205, 0);
+}
+
+.yellowbg {
+    background-color: rgb(253, 253, 0);
+}
+
+.orangebg {
+    background-color: orange;
+}
+
+.redbg {
+    background-color: red;
+}
+
+.overview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    flex-wrap: wrap;
+}
+
+
+.overview > div {
+    flex: 1 1 30%; /* Allow items to grow and fill the space */
+    margin: 5px; /* Add some margin between items */
 }

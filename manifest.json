@@ -7,6 +7,9 @@
       "default_popup": "popup/popup.html",
       "default_icon": "flag-standalone-bw.png"
     },
+    "permissions": [
+        "storage"
+    ],
     "content_scripts": [
         {
             "js": ["scripts/main.js"],
