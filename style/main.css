@@ -24,10 +24,64 @@
     align-items: center;
 
     flex-wrap: wrap;
+    overflow: hidden;
+
+    transition: all 0.3s ease-in-out;
 }
 
 
 .overview > div {
     flex: 1 1 30%; /* Allow items to grow and fill the space */
     margin: 5px; /* Add some margin between items */
+}
+
+.YAHSE-title {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.YAHSE-rotated {
+    transform: rotate(-90deg);
+    -webkit-transform:rotate(-90deg); 
+    -moz-transform:rotate(-90deg); 
+    -o-transform:rotate(-90deg); 
+    transition: all 0.2s linear;
+}
+
+.YAHSE-norotated {
+    transform: rotate(0deg);
+    -webkit-transform:rotate(0deg); 
+    -moz-transform:rotate(0deg); 
+    -o-transform:rotate(0deg); 
+    transition: all 0.2s linear;
+}
+
+.YAHSE-iteminput {
+    margin-left: 5px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.YAHSE-timediv {
+    display: flex;
+    flex-direction: column;
+}
+
+.YAHSE-goaldiv {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.YAHSE-timebar {
+    width: 100%;
+    height: 40px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.YAHSE-itemdisplaydiv {
+    height: fit-content;
+    width: 264px;
 }
