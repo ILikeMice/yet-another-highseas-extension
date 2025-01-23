@@ -113,7 +113,6 @@ function addoverview() {
   overviewdiv.appendChild(totalships)
   overviewdiv.appendChild(dphdiv)
   
-  
   shipdiv.insertAdjacentElement("afterbegin", overviewdiv)
   
 
@@ -123,10 +122,22 @@ function addoverview() {
 
 function addwindowstats() {
   if (!document.getElementById("YAHSE-windowdph")) {
+    let shipdata = window.localStorage.getItem("cache.ships")
     let shiptitle = document.querySelector("h2.text-3xl.font-bold").innerText
     let pillcontainer = document.querySelector("div.flex.items-center.gap-4.mt-4")
     console.log(shiptitle)
-    let dphpill = `<span id="YAHSE-windowdph" class="inline-flex items-center gap-1 rounded-full px-2 border text-sm leading-none text-gray-600 bg-gray-50 border-gray-500/10 bg-white/15 text-white " data-sentry-component="Pill" data-sentry-source-file="pill.tsx" style="vertical-align: middle;"><img alt="doubloons" loading="lazy" width="16" height="20" decoding="async" data-nimg="1" src="/_next/static/media/doubloon.fd63888b.svg" style="color: transparent;"><span class="inline-block py-1">16 db/h</span></span>`
+
+    let shipdoubloons = 0
+    let shiphours = 0
+
+    for (let i = 0; i < shipdata["value"].length; i++) {
+      if (shipdata["value"][i]["title"] == shiptitle) {
+        shipdoubloons += shipdata["value"][i]["doubloonPayout"]
+        shiphours += shipdata["value"][i]["hours"]
+      }
+    }
+    
+    let dphpill = `<span id="YAHSE-windowdph" class="inline-flex items-center gap-1 rounded-full px-2 border text-sm leading-none text-gray-600 bg-gray-50 border-gray-500/10 bg-white/15 text-white " data-sentry-component="Pill" data-sentry-source-file="pill.tsx" style="vertical-align: middle;"><img alt="doubloons" loading="lazy" width="16" height="20" decoding="async" data-nimg="1" src="/_next/static/media/doubloon.fd63888b.svg" style="color: transparent;"><span class="inline-block py-1">${(shipdoubloons/shiphours).toFixed(1)} db / h</span></span>`
     pillcontainer.insertAdjacentHTML("beforeend", dphpill)
   }
 }
@@ -146,7 +157,6 @@ async function load() {
       console.log(shipdata["value"][i])
       if (window.location.pathname == "/shipyard") {
         adddph(`shipped-ship-${i}-shipped`, shipdata["value"])
-        
       }
     }
     console.log(shipdata)
@@ -168,5 +178,5 @@ function checkitems() {
 
 window.onload = () => {
   load()
-  setInterval(checkitems, 1000)
+  setInterval(checkitems, 500)
 }
