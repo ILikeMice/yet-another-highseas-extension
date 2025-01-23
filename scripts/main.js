@@ -149,11 +149,9 @@ function addoverview() {
 }
 
 function addtime() {
-  if (document.getElementById("YAHSE-time")) {
+  if (document.getElementById("YAHSE-timediv")) {
     return
   }
-
-  
 
   let shipdiv = document.querySelector("div.space-y-4.mt-8")
   let timetitle = document.createElement("h2")
@@ -181,7 +179,7 @@ function addtime() {
   timebar.className = "YAHSE-timebar"
 
   let timediv = document.createElement("div")
-  timediv.id = "YAHSE-time"
+  timediv.id = "YAHSE-timediv"
   timediv.className = "YAHSE-timediv rounded-lg bg-card text-card-foreground shadow-sm bg-blend-color-burn flex flex-col sm:gap-2 sm:items-center p-4  transition-colors duration-200"
 
   let goaldiv = document.createElement("div")
@@ -199,12 +197,17 @@ function addtime() {
     itemdatalist.appendChild(option)
   }
 
+  let iteminfodiv = document.createElement("div")
+  iteminfodiv.id = "YAHSE-iteminfodiv"
+  
+
   let iteminput = document.createElement("input")
   iteminput.className = "YAHSE-iteminput"
   iteminput.id = "YAHSE-iteminput"
   iteminput.setAttribute("list", "YAHSE-itemdatalist")
 
   iteminput.oninput = () => setgoal(itemlist)
+
 
   function setgoal(items) {
     if (!items.includes(document.getElementById("YAHSE-iteminput").value)) {
@@ -253,7 +256,7 @@ function addtime() {
                     <span class="text-green-500 font-semibold flex items-center">
                         <img src="doubloon.svg" alt="doubloons" width="20" height="20" class="mr-1" />${itemprice}
                     </span>
-                    <span class="text-xs text-gray-600">(approx. ${(itemprice/(doublooncount/hourcount)).toFixed(true)} hours) (${(itemprice/(doublooncount/hourcount) - hourcount).toFixed(true)}h to go!)</span>
+                    <span class="text-xs text-gray-600">(approx. ${(itemprice/(doublooncount/hourcount)).toFixed(true)} hours)</span>
                 </p>
             </div>
             <div class="p-0 flex-grow">
@@ -265,10 +268,40 @@ function addtime() {
             </div>
         </div>
     </div>`
-  
+    
+    let timediv = document.getElementById("YAHSE-timediv")
 
     itemdisplay.innerHTML = ""
     itemdisplay.insertAdjacentHTML("beforeend", itemobject)
+
+    
+    let iteminfodiv = document.getElementById("YAHSE-iteminfodiv")
+    iteminfodiv.innerHTML = ""
+    iteminfodiv.className = "YAHSE-timebar"
+    iteminfodiv.style.marginTop = "10px"
+
+    let hoursleftdiv = document.createElement("div")
+    hoursleftdiv.className = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition duration-150  bg-[#9AD9EE] text-black h-10 px-4 py-2 bg-blend-color-burn"
+
+    hoursleftdiv.innerText = "Hours left until Item: " + (itemprice/(doublooncount/hourcount) - hourcount).toFixed(1)
+
+    hoursleftdiv.innerHTML += `<svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" xmlns="http://www.w3.org/2000/svg" aria-label="clock" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet" fill="currentColor" width="20" height="20" style="display: inline-block; vertical-align: middle;"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M26 16c0 5.523-4.477 10-10 10S6 21.523 6 16 10.477 6 16 6s10 4.477 10 10zm2 0c0 6.627-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4s12 5.373 12 12z"></path><path d="M15.64 17a1 1 0 0 1-1-1V9a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1z"></path><path d="M21.702 19.502a1 1 0 0 1-1.366.366l-5.196-3a1 1 0 0 1 1-1.732l5.196 3a1 1 0 0 1 .366 1.366z"></path></g></svg>`
+
+    let dailyreqdiv = document.createElement("div")
+    let daysleft = Math.round((new Date("2025-01-31 23:59:59") - Date.now()) / 86400000)
+    
+    dailyreqdiv.className = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition duration-150  bg-[#9AD9EE] text-black h-10 px-4 py-2 bg-blend-color-burn"
+
+    dailyreqdiv.innerText = "Daily Hour requirement to get Item before End: " + ((itemprice/(doublooncount/hourcount) - hourcount)/ daysleft).toFixed(1)
+    dailyreqdiv.innerHTML += `<svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" xmlns="http://www.w3.org/2000/svg" aria-label="clock" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet" fill="currentColor" width="20" height="20" style="display: inline-block; vertical-align: middle;"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M26 16c0 5.523-4.477 10-10 10S6 21.523 6 16 10.477 6 16 6s10 4.477 10 10zm2 0c0 6.627-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4s12 5.373 12 12z"></path><path d="M15.64 17a1 1 0 0 1-1-1V9a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1z"></path><path d="M21.702 19.502a1 1 0 0 1-1.366.366l-5.196-3a1 1 0 0 1 1-1.732l5.196 3a1 1 0 0 1 .366 1.366z"></path></g></svg>`
+
+
+
+    iteminfodiv.appendChild(hoursleftdiv)
+    iteminfodiv.appendChild(dailyreqdiv)
+    
+    timediv.appendChild(iteminfodiv)
+
     console.log("added")
   }
 
@@ -277,7 +310,7 @@ function addtime() {
   itemdisplaydiv.className = "YAHSE-itemdisplaydiv"
 
   
-  goaldiv.innerText = "Goal: "
+  goaldiv.innerText = "Goal Item: "
   goaldiv.appendChild(iteminput)
   goaldiv.appendChild(itemdatalist)
 
@@ -286,13 +319,12 @@ function addtime() {
   
   timediv.appendChild(timebar)
   timediv.appendChild(itemdisplaydiv)
+  timediv.appendChild(iteminfodiv)
 
   shipdiv.insertAdjacentElement("afterbegin", timediv)
   shipdiv.insertAdjacentElement("afterbegin", timetitle)
   
 }
-
-
 
 function addwindowstats() {
   if (!document.getElementById("YAHSE-windowdph")) {
@@ -317,6 +349,7 @@ function addwindowstats() {
   }
 }
 
+
 async function load() {
     console.log("HIGHSEAS!!!!", window.location.pathname)
     let doubloonspan = await waitForElementToExist(".mr-2")
@@ -327,6 +360,7 @@ async function load() {
     chrome.storage.local.set({ "shipdata": shipdata }, function(){
       console.log("data saved yippie")
     }); 
+    
     
     for (let i = 0; i < Object.keys(shipdata["value"]).length; i++) {
       console.log(shipdata["value"][i])

@@ -1,14 +1,12 @@
+function setkey() {
+    chrome.storage.local.set({"api-key":"testing"}, () => {
+        console.log("written!")
+    })
+}
+
 window.onload = () => {
-    chrome.storage.local.get("shipdata", (res) => {
+    chrome.storage.local.get("api-key", (res) => {
         console.log(res)
-        let data = res["shipdata"]["value"]
-        let dailyhours = 0
-        let totalhours = 0
-        let totaldoubloons = 0
-        for (let i = 0; i < Object.keys(data); i++) {
-            totalhours += data["value"][i][""]
-        }
-        
-        document.getElementById("testspan").innerText = dailyhours;
-    });
+        document.getElementById("keyinput").value = res["api-key"]
+    })
 }
