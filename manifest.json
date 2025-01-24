@@ -4,14 +4,12 @@
     "description": "Extension to display useful stats on https://highseas.hackclub.com/",
     "version": "1.0",
     "action": {
-      "default_popup": "popup/popup.html",
       "default_icon": "flag-standalone-bw.png"
     },
     "permissions": [
-        "storage"
+        "storage",
+        "tabs"
     ],
-    "background": {
-    },
     "content_scripts": [
         {
             "js": ["scripts/main.js"],

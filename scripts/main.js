@@ -349,13 +349,61 @@ function addwindowstats() {
   }
 }
 
+function apipopup() {
+  let apidiv = document.createElement("div") 
+  apidiv.className = "YAHSE-apidiv"
+
+  let apititle = document.createElement("h2")
+  apititle.innerText = "API Key"
+  apititle.className = "YAHSE-apititle"
+
+  let apitext = document.createElement("p")
+  apitext.className = "YAHSE-apitext"
+  apitext.innerHTML = "Welcome! To proceed, please enter your Hackatime API key from https://waka.hackclub.com below!"
+
+  let apiinput = document.createElement("input")
+  apiinput.className = "YAHSE-apiinput"
+  apiinput.placeholder = "Enter API Key here..."
+  apiinput.oninput = async () => {
+    let key = apiinput.value
+    console.log(key)
+    keyinp = key
+    await fetch('https://waka.hackclub.com/api/compat/wakatime/v1/users/current', {
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Basic ' + btoa(key)
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        try {
+            let id = data["data"]["id"]
+            console.log(data)
+            console.log(id)
+            window.localStorage.setItem({"YAHSE-userdata": key}, () => {})
+        } catch (err) {
+            console.log(err)
+        }
+      })
+
+}  
+   
+  apidiv.appendChild(apititle)
+  apidiv.appendChild(apitext)
+  apidiv.appendChild(apiinput)
+
+  document.body.appendChild(apidiv)
+}
 
 async function load() {
+    
     console.log("HIGHSEAS!!!!", window.location.pathname)
+    let key = window.localStorage.getItem("YAHSE-userdata")
+    console.log(key)
     let doubloonspan = await waitForElementToExist(".mr-2")
     let doublooncount = Number(doubloonspan.innerText.split(" ")[0])
     console.log(doublooncount)
-
+    apipopup()
     let shipdata = JSON.parse(window.localStorage.getItem("cache.ships"))
     chrome.storage.local.set({ "shipdata": shipdata }, function(){
       console.log("data saved yippie")
