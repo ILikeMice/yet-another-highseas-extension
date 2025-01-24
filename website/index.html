@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="website.css">
+    <link rel="icon" type="image/x-icon" href="../flag-standalone-bw.png">
+    <script src="website.js"></script>
     <title>YAHSE</title>
-</head>
-<body>
     
+</head>
+<body class="welcomebody">
+    <span id="welcometitle" class="welcometitle">Please Enter your API key from waka.hackclub.com below!</span>
+    <div id="maindiv" class="maindiv">
+        <div class="inputdiv">
+            <input oninput="savekey()" id="keyinput" class="keyinput" type="password" placeholder="Enter Hackatime API Key...">
+            <button id="showbtn" class="showbtn" onclick="togglepass()"><img style="width: 100%; height: 100%;" src="https://icons.hackclub.com/api/icons/hackclub-white/view"></button>
+        </div>
+    </div>
 </body>
 </html>
