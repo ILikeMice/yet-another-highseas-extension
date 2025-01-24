@@ -10,6 +10,8 @@
     "permissions": [
         "storage"
     ],
+    "background": {
+    },
     "content_scripts": [
         {
             "js": ["scripts/main.js"],

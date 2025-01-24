@@ -5,8 +5,13 @@ function setkey() {
 }
 
 window.onload = () => {
-    chrome.storage.local.get("api-key", (res) => {
-        console.log(res)
-        document.getElementById("keyinput").value = res["api-key"]
+    let key = window.localStorage.getItem("YAHSE-userdata")
+    let apiurl = ""
+    let res = fetch(url, {
+        "method": "GET",
+        "headers": {
+            "Authorization": "Basic " + key
+        }
     })
+
 }
