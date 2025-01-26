@@ -68,18 +68,23 @@
     flex-direction: column;
 }
 
-.YAHSE-goaldiv {
-    margin-left: auto;
-    margin-right: auto;
-}
 
 .YAHSE-timebar {
     width: 100%;
-    height: 40px;
+    height: 80px;
 
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    margin-bottom: 10px;
+}
+
+.YAHSE-timebar > div {
+    flex: 1 1 30%; /* Allow items to grow and fill the space */
+    margin: 5px; /* Add some margin between items */
 }
 
 .YAHSE-itemdisplaydiv {

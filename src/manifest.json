@@ -10,6 +10,12 @@
         "storage",
         "tabs"
     ],
+    "icons": {
+        "16": "flag-standalone-bw.png",
+        "32": "flag-standalone-bw.png",
+        "48": "flag-standalone-bw.png",
+        "128": "flag-standalone-bw.png"
+    },
     "content_scripts": [
         {
             "js": ["scripts/main.js"],

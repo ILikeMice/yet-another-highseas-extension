@@ -152,11 +152,24 @@ function addtime() {
   if (document.getElementById("YAHSE-timediv")) {
     return
   }
+  
 
   let shipdiv = document.querySelector("div.space-y-4.mt-8")
   let timetitle = document.createElement("h2")
   timetitle.className = "YAHSE-title text-center text-2xl text-blue-500"
   timetitle.innerText = " Time"
+  try {
+    let itemdata = JSON.parse(window.localStorage.getItem("cache.shopItems"))["value"]
+  } catch {
+    if (document.getElementById("YAHSE-timetitle")) {
+      return
+    }
+    timetitle.innerText = "Please visit the shop and come back to unlock this feature!"
+    timetitle.id = "YAHSE-timetitle"
+    shipdiv.insertAdjacentElement("afterbegin", timetitle)
+    return;
+  }
+
   let titlebtn = document.createElement("button")
   titlebtn.className = "YAHSE-norotated"
   titlebtn.onclick = () => {
@@ -183,8 +196,43 @@ function addtime() {
   timediv.className = "YAHSE-timediv rounded-lg bg-card text-card-foreground shadow-sm bg-blend-color-burn flex flex-col sm:gap-2 sm:items-center p-4  transition-colors duration-200"
 
   let goaldiv = document.createElement("div")
-  goaldiv.className = "YAHSE-goaldiv inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition duration-150  bg-[#9AD9EE] text-black h-10 px-4 py-2 bg-blend-color-burn"
+  goaldiv.className = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition duration-150  bg-[#9AD9EE] text-black h-10 px-4 py-2 bg-blend-color-burn"
   
+  async function addunshipped() {
+    let hourcount = 0
+    let shipdata = JSON.parse(window.localStorage.getItem("cache.ships"))["value"]
+    for (let i = 0; i < Object.keys(shipdata).length; i++) {
+      if (shipdata[i]["reshippedFromId"] == null) {
+        hourcount += shipdata[i]["hours"]
+      }
+    }
+    let key = window.localStorage.getItem("YAHSE-userdata")
+    await fetch('https://waka.hackclub.com/api/compat/wakatime/v1/users/current/all_time_since_today', {
+      headers: {
+        'accept': 'application/json',
+        'Authorization': 'Basic ' + btoa(key)
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      try {
+          let seconds = data["data"]["total_seconds"]
+          console.log(data)
+          window.localStorage.setItem("YAHSE-totalseconds", seconds)
+          let unshippeddiv = document.createElement("div")
+          unshippeddiv.className = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition duration-150  bg-[#9AD9EE] text-black h-10 px-4 py-2 bg-blend-color-burn"
+
+          unshippeddiv.innerText = "Unshipped Hours: " +((seconds / 3600) - hourcount).toFixed(2)
+          unshippeddiv.innerHTML += `<svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" xmlns="http://www.w3.org/2000/svg" aria-label="clock" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet" fill="currentColor" width="20" height="20" style="display: inline-block; vertical-align: middle;"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M26 16c0 5.523-4.477 10-10 10S6 21.523 6 16 10.477 6 16 6s10 4.477 10 10zm2 0c0 6.627-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4s12 5.373 12 12z"></path><path d="M15.64 17a1 1 0 0 1-1-1V9a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1z"></path><path d="M21.702 19.502a1 1 0 0 1-1.366.366l-5.196-3a1 1 0 0 1 1-1.732l5.196 3a1 1 0 0 1 .366 1.366z"></path></g></svg>`
+
+          timebar.appendChild(unshippeddiv)
+      } catch (err) {
+          console.error(err)
+      }
+    })
+  }
+  addunshipped()
+
   let itemdatalist = document.createElement("datalist")
   itemdatalist.id = "YAHSE-itemdatalist"
 
@@ -193,6 +241,7 @@ function addtime() {
   for (let i = 0; i < Object.keys(itemdata).length; i++) {
     let option = document.createElement("option")
     option.value = itemdata[i]["id"].replaceAll("item_", "")
+    option.innerText = itemdata[i]["name"]
     itemlist.push(itemdata[i]["id"].replaceAll("item_", ""))
     itemdatalist.appendChild(option)
   }
@@ -295,10 +344,17 @@ function addtime() {
     dailyreqdiv.innerText = "Daily Hour requirement to get Item before End: " + ((itemprice/(doublooncount/hourcount) - hourcount)/ daysleft).toFixed(1)
     dailyreqdiv.innerHTML += `<svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" xmlns="http://www.w3.org/2000/svg" aria-label="clock" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet" fill="currentColor" width="20" height="20" style="display: inline-block; vertical-align: middle;"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M26 16c0 5.523-4.477 10-10 10S6 21.523 6 16 10.477 6 16 6s10 4.477 10 10zm2 0c0 6.627-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4s12 5.373 12 12z"></path><path d="M15.64 17a1 1 0 0 1-1-1V9a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1z"></path><path d="M21.702 19.502a1 1 0 0 1-1.366.366l-5.196-3a1 1 0 0 1 1-1.732l5.196 3a1 1 0 0 1 .366 1.366z"></path></g></svg>`
 
+    let totalseconds = window.localStorage.getItem("YAHSE-totalseconds")
+    let dailyrequnshippeddiv = document.createElement("div") // incredible naming
+    dailyrequnshippeddiv.className = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transition duration-150  bg-[#9AD9EE] text-black h-10 px-4 py-2 bg-blend-color-burn"
+
+    dailyrequnshippeddiv.innerText = "Daily Requirement (counting unshipped Hours): " + ((itemprice/(doublooncount/(totalseconds / 3600 - hourcount)) - (totalseconds / 3600 - hourcount))/ daysleft).toFixed(1)
+    dailyrequnshippeddiv.innerHTML += `<svg fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" xmlns="http://www.w3.org/2000/svg" aria-label="clock" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet" fill="currentColor" width="20" height="20" style="display: inline-block; vertical-align: middle;"><g><path fill-rule="evenodd" clip-rule="evenodd" d="M26 16c0 5.523-4.477 10-10 10S6 21.523 6 16 10.477 6 16 6s10 4.477 10 10zm2 0c0 6.627-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4s12 5.373 12 12z"></path><path d="M15.64 17a1 1 0 0 1-1-1V9a1 1 0 0 1 2 0v7a1 1 0 0 1-1 1z"></path><path d="M21.702 19.502a1 1 0 0 1-1.366.366l-5.196-3a1 1 0 0 1 1-1.732l5.196 3a1 1 0 0 1 .366 1.366z"></path></g></svg>`
 
 
     iteminfodiv.appendChild(hoursleftdiv)
     iteminfodiv.appendChild(dailyreqdiv)
+    iteminfodiv.appendChild(dailyrequnshippeddiv)
     
     timediv.appendChild(iteminfodiv)
 
@@ -352,6 +408,7 @@ function addwindowstats() {
 function apipopup() {
   let apidiv = document.createElement("div") 
   apidiv.className = "YAHSE-apidiv"
+  apidiv.id = "YAHSE-apidiv"
 
   let apititle = document.createElement("h2")
   apititle.innerText = "API Key"
@@ -362,6 +419,7 @@ function apipopup() {
   apitext.innerHTML = "Welcome! To proceed, please enter your Hackatime API key from https://waka.hackclub.com below!"
 
   let apiinput = document.createElement("input")
+  apiinput.type = "password"
   apiinput.className = "YAHSE-apiinput"
   apiinput.placeholder = "Enter API Key here..."
   apiinput.oninput = async () => {
@@ -380,14 +438,14 @@ function apipopup() {
             let id = data["data"]["id"]
             console.log(data)
             console.log(id)
-            window.localStorage.setItem({"YAHSE-userdata": key}, () => {})
+            window.localStorage.setItem("YAHSE-userdata", key)
+            apidiv.style.display = "none"
         } catch (err) {
             console.log(err)
         }
       })
 
 }  
-   
   apidiv.appendChild(apititle)
   apidiv.appendChild(apitext)
   apidiv.appendChild(apiinput)
@@ -403,7 +461,32 @@ async function load() {
     let doubloonspan = await waitForElementToExist(".mr-2")
     let doublooncount = Number(doubloonspan.innerText.split(" ")[0])
     console.log(doublooncount)
-    apipopup()
+    try {
+      let key = window.localStorage.getItem("YAHSE-userdata")
+      await fetch('https://waka.hackclub.com/api/compat/wakatime/v1/users/current', {
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Basic ' + btoa(key)
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        try {
+            console.log(data)
+            window.localStorage.setItem("YAHSE-userdata", key)
+        } catch (err) {
+            console.log(err)
+        }
+      })
+    } catch {
+      if (!document.getElementById("YAHSE-apidiv")) {
+        apipopup()
+      } else {
+        document.getElementById("YAHSE-apidiv").style.display = "grid"
+      }
+      
+    }
+    
     let shipdata = JSON.parse(window.localStorage.getItem("cache.ships"))
     chrome.storage.local.set({ "shipdata": shipdata }, function(){
       console.log("data saved yippie")
